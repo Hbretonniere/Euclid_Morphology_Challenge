@@ -1,8 +1,6 @@
 import os
 import pickle
-
 import numpy as np
-import streamlit
 from astropy.table import Table
 import streamlit as st
 
@@ -61,7 +59,6 @@ def load_data(dataset, band=None, nb_free=False, demo=False):
     filename = f"data/challenge_5sig_overlap_{nb_free_prefix}{dataset}{band}.fits"
 
     if not os.path.exists(filename):
-        print
         st.markdown('# Downloading the catalogues, can take some time...')
         os.system('zenodo_get -o ./data/ 10.5281/zenodo.6421906')
     
