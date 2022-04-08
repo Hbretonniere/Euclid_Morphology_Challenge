@@ -1,0 +1,11 @@
+*.png
+*.DS_Store
+*.key
+*.pdf
+*.fits
+*.ipynb*
+*data/
+*homogenize/
+__pycache__/
+*.pickle
+results/
