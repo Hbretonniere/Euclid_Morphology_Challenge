@@ -201,21 +201,21 @@ def summary2D(
     y_min, y_max = bts
     bt_bins = np.linspace(y_min, y_max, n_bins_bt + 1)
     for param in params:
-        try:
+        # try:
             results = compute_summary2D(
                 df, params, codes, mag_bins, bt_bins
             )
             figure = summary_plot2D(codes, param, results, mag_bins, bt_bins, LABELS)
             st.pyplot(figure)
-        except ValueError:
-            st.markdown(
-                "## Not enough galaxies per bin, try to reduce the ranges or quit the demo mode."
-            )
-            return 0
+        # except ValueError:
+        #     st.markdown(
+        #         "## Not enough galaxies per bin, try to reduce the ranges or quit the demo mode."
+        #     )
+            # return 0
     return results
 
 
-def trumpet(df, params, codes, x_axis, x_range, nb_bins, outlier_threshold, ymax):
+def trumpet(df, params, codes, x_axis, x_range, nb_bins, outlier_threshold, y_range):
     """
     Compute and plot the Summary Figure representing the different metrics (Bias, Dispersion and Outlier fraction)
     for different codes and parameters.
@@ -276,7 +276,7 @@ def trumpet(df, params, codes, x_axis, x_range, nb_bins, outlier_threshold, ymax
             outlier_threshold,
             x_axis,
             [x_min, x_max],
-            [-ymax, ymax],
+            y_range,
             nb_bins,
             labels=LABELS,
             freq_scat=1,

@@ -57,6 +57,8 @@ def load_data(dataset, band=None, nb_free=False, demo=False):
     band = "" if band is None else f"_{band}"
 
     filename = f"data/challenge_5sig_overlap_{nb_free_prefix}{dataset}{band}.fits"
+    # filename = f"data/challenge_5sig_overlap_single_sersic_wometrykastars.fits"
+    # filename = f"data/gala_constrained_challenge_5sig_overlap_double_sersic.fits"
 
     if not os.path.exists(filename):
         st.markdown('# Downloading the catalogues, can take some time...')
@@ -76,8 +78,6 @@ def save_results(results, dataset, nb_free):
     """
     Save the metrics results dictionary in a pickle file
 
-    # TO DO: - see what happens for global score plots
-             - do the same nb_free but for the band
 
     Parameters
     ----------

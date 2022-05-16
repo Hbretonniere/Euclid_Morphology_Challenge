@@ -17,31 +17,13 @@ from app.utils import get_x_axis_range
 DATASETS = ("single_sersic", "double_sersic", "realistic", "multiband")
 PARAMETERS_2D = ["re", "q"]
 
+def photometry(demo):
+    st.write('photo')
 
-def main():
-    """
-    Create the different buttons and setting of the app. The description of the buttons are in help.py
-    The buttons and setting depend of the selected dataset. The differences are written in the dictionaries
-    defined in params.py
+def morphology(demo):
 
-    Load the wanted dataset, defined in io.py
-
-    Call the different actions defined in summary.py,
-    which call someroutines of utils.py and the plotting routines defined in plot.py
-
-    Launch the web page with the interface
-    """
     nb_free = False
     band = None
-
-    description = st.expander("README")
-    description.markdown(readme)
-
-    st.title("MorphoChallenge DIY plots")
-    demo = st.checkbox(
-        "Demo version (much faster). Uncheck when all set to get the full results.",
-        value=True,
-    )
 
     st.sidebar.markdown("## Controls")
     st.sidebar.markdown(
@@ -60,12 +42,6 @@ def main():
         nb_free = st.sidebar.checkbox("Use free bulge Sersic fit")
     elif dataset == "multiband":
         dataset_params = multiband_params
-        # band = st.sidebar.radio("Which fitted band ?", ["VIS", "NIR-y"])
-
-        # if band == "NIR-y" and "SE++" in dataset_params["available_codes"]:
-            # dataset_params["available_codes"].remove("SE++")
-        # results = bt_multiband(df, bands, codes, outliers, 'Truemag', factors)
-
     if nb_free:
         dataset_params = double_sersic_free_params
 
@@ -101,7 +77,7 @@ def main():
             "Select software to display",
             dataset_params["available_codes"],
             default=dataset_params["available_codes"],
-            format_func=lambda x: LABELS[x],
+            format_func=lambda x: LABELS[x+'_'],
         )
         if len(codes) == 0:
             st.markdown("## Select at least one software to plot !")
@@ -114,7 +90,7 @@ def main():
 
     #  #### X AXIS OPTIONS ####
     x_min, x_max = 28, 25.3
-    if dataset == 'mutliband':
+    if dataset == 'multiband':
         all_bands = st.sidebar.checkbox("Plot all bands")
         if all_bands:
             bands = dataset_params['bands']
@@ -154,8 +130,8 @@ def main():
         x_axis = st.sidebar.radio("X axis", dataset_params["x_axis_options"])
         default_bins = 11
         if plot_type == "Trumpet Plots":
-            y_max = st.slider(
-                "Bias range", min_value=0.3, max_value=5.0, value=1.0, step=0.1
+            y_lims = st.slider(
+                "x-axis range", min_value=-5., max_value=10., value=[-1., 1.], step=0.1
             )
        
         xs = get_x_axis_range(dataset, x_axis, demo)
@@ -205,7 +181,7 @@ def main():
             )
             # st.write(results)
         elif plot_type == "Trumpet Plots":
-            results = trumpet(df, params, codes, x_axis, xs , n_bins, outliers, y_max)
+            results = trumpet(df, params, codes, x_axis, xs , n_bins, outliers, y_lims)
         elif plot_type == "2D Summary Plots":
             results = summary2D(df, params, codes, mags, n_bins_mag, bts, n_bins_bt, outliers)
         elif plot_type == "Summary Scores":
@@ -219,6 +195,35 @@ def main():
             filepath = save_results(results, dataset, nb_free)
             st.success(f"Results saved as {filepath}")
 
+
+def main():
+    """
+    Create the different buttons and setting of the app. The description of the buttons are in help.py
+    The buttons and setting depend of the selected dataset. The differences are written in the dictionaries
+    defined in params.py
+
+    Load the wanted dataset, defined in io.py
+
+    Call the different actions defined in summary.py,
+    which call someroutines of utils.py and the plotting routines defined in plot.py
+
+    Launch the web page with the interface
+    """
+
+    description = st.expander("README")
+    description.markdown(readme)
+
+    st.title("MorphoChallenge DIY plots \n ### Select between Photometry (Paper 1) and Morphology (Paper 2)")
+    demo = st.checkbox(
+        "Demo version (much faster). Uncheck when all set to get the full results.",
+        value=True,
+    )
+
+    paper = st.radio("", ['Morphology', 'Photometry'])
+    if paper == 'Photometry':
+        photometry(demo)
+    else:
+        morphology(demo)
 
 if __name__ == "__main__":
     main()

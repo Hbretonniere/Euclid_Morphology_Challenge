@@ -374,7 +374,7 @@ def compute_summary2D(
 
             - codes : list of strings. 
                 The different codes you want to study.
-                should be one of the following : sex+, profit, gala, deepleg, metryka.
+                should be one of the following : SE++, profit, gala, deepleg, metryka.
 
             - x_bins : list of float. 
                 The list of bins of the x-axis (magnitude or b/t) for the study. Stop at x_bins[-1].
@@ -425,36 +425,38 @@ def compute_summary2D(
             # Loop through the magnitude bins'''
             for i in range(len(x_bins) - 1):
                 for j in range(len(y_bins) - 1):
-                    try:
+                    # try:
                         cat_bin, fraction = sub_cat2d(
                             cat, x_axis, x_bins, y_axis, y_bins, i, j
                         )
                         fracgals.append(fraction)
 
-                        error_b = compute_error_bin(
-                            cat_bin, code, param + "b", mode=mode, abs=abs
+                        abs_error_b = compute_error_bin(
+                            cat_bin, code, param + "b", mode=mode, abs=True
                         )
 
-                        error_d = compute_error_bin(
-                            cat_bin, code, param + "d", mode=mode, abs=abs
+                        abs_error_d = compute_error_bin(
+                            cat_bin, code, param + "d", mode=mode, abs=True
                         )
 
-                        means[0, i, j] = np.nanmedian(error_b)
-                        means[1, i, j] = np.nanmedian(error_d)
+                        classic_error_b = compute_error_bin(
+                            cat_bin, code, param + "b", mode=mode, abs=False
+                        )
 
-                        stds[0, i, j] = compute_disp(error_b)
-                        stds[1, i, j] = compute_disp(error_d)
+                        classic_error_d = compute_error_bin(
+                            cat_bin, code, param + "d", mode=mode, abs=False
+                        )
 
-                        outb = (len(cat_bin) - len(error_b)) / len(cat_bin)
-                        outd = (len(cat_bin) - len(error_d)) / len(cat_bin)
+                        means[0, i, j] = np.nanmedian(abs_error_b)
+                        means[1, i, j] = np.nanmedian(abs_error_d)
+
+                        stds[0, i, j] = compute_disp(classic_error_b)
+                        stds[1, i, j] = compute_disp(classic_error_d)
+
+                        outb = (len(cat_bin) - len(classic_error_d)) / len(cat_bin)
+                        outd = (len(cat_bin) - len(classic_error_d)) / len(cat_bin)
                         outs[0, i, j] = outb
                         outs[1, i, j] = outd
-                    except ZeroDivisionError:
-                        if write == 0:
-                            st.markdown(
-                                "## Not enough point on the bins, try a higher minimum magnitude."
-                            )
-                        write = 1
 
                 params_means[param][code] = means
                 params_stds[param][code] = stds
@@ -690,14 +692,12 @@ def get_x_axis_range(dataset, x_axis, demo):
 
     elif x_axis == "Truebt":
         x_button_name = "True b/t range"
-        min_val, max_val, step = 0., 1., 0.1
+        options = np.around(np.logspace(-2, 0, 20), 2)
         values = (0., 1.)
-        x_min, x_max = st.slider(
+        x_min, x_max = st.select_slider(
             x_button_name,
-            min_value=min_val,
-            max_value=max_val,
-            value=values,
-            step=step,
+            value=(options[0], options[-1]),
+            options=options
         )
     
     elif x_axis == "Truen":
