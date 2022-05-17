@@ -257,11 +257,7 @@ def trumpet_plot(
         grid_scat.set_xticks(x_bins[::2])
         grid_scat.set_xticklabels(np.round(grid_scat.get_xticks(), 1), usetex=True, fontsize=22)
         grid_scat.set_yticklabels(np.round(grid_scat.get_yticks(), 2), usetex=True, fontsize=22)
-        # if param not in ["mag", "re", "reb", "red", 'n', 'bt', 'qb', 'qd']:
-        #     grid_scat.set_ylabel(
-        #         f"$\mathrm{{Pred_{{{param}}}}} - \mathrm{{True_{{{param}}}}} $",
-        #         fontsize=30, usetex=True
-        #     )
+
         if param == 'n':
             grid_scat.set_ylabel(
                 r"$\mathrm{Pred}_{\log_{\mathrm{10}}({n})} - \mathrm{True}_{\log_{\mathrm{10}}({n})} $",
@@ -1041,3 +1037,40 @@ def summary_plot2D(codes, param, summary2D, mag_bins, bt_bins, labels):
         cb2_std.ax.yaxis.set_major_formatter(FormatStrFormatter("%.2f"))
 
     return fig
+
+
+def photo_trumpet_plots(cats, codes, fields, LABELS):
+    
+    for field in fields:
+        nb_lines = int(np.ceil(len(codes) / 2))
+        fig, ax = plt.subplots(nb_lines, 2, figsize=(5*nb_lines*1.4, 5*nb_lines))
+        ax = ax.flatten()
+        plt.subplots_adjust(hspace=0.4)
+        p = 0
+        for code in codes:
+            cat = cats[f'{code}_{field}']
+            a = ax[p].scatter(cat[:, 0], cat[:, 1], c=cat[:, 2], marker='.', cmap='gist_rainbow', s=1)
+            ax[p].set_ylim([-1, 1])
+            plt.colorbar(a, ax=ax[p]).set_label(label='BT', size=20)
+            ax[p].set_title(f'{LABELS[code]}, Field {field}', fontsize=20)
+            xbins = np.linspace(14, 26, 11)
+            means = []
+            stds = []
+            for i, mag in enumerate(xbins[:-1]):
+                sub_cat = cat[np.where((cat[:, 0] > mag)  &
+                (cat[:, 0]  < xbins[i+1])), 1]
+                mean = np.mean(sub_cat)
+                std = np.std(sub_cat)
+                means.append(mean)
+                stds.append(std)
+            # print(len(xbins), len(means))
+            ax[p].errorbar(xbins[:-1], means, stds)
+            ax[p].set_xlabel('$I_{\mathrm{\mathsf{E}}}$ true magnitude', fontsize=20)
+            ax[p].set_ylabel("$I_{\mathrm{\mathsf{E}}}$  $\delta f$", fontsize=20)
+            ax[p].tick_params(axis='both', labelsize=15)
+            p += 1
+    
+        if len(codes) % 2 != 0:
+            ax[-1].set_visible(False)
+        st.pyplot(fig)
+    return 0

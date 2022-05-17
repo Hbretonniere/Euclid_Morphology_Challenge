@@ -12,6 +12,7 @@ from app.params import (
     LABELS,
 )
 from app.summary import summary, summary2D, trumpet, score, error_calibration, bt_multiband
+from app.plots import photo_trumpet_plots
 from app.utils import get_x_axis_range
 import matplotlib.pyplot as plt
 
@@ -24,8 +25,6 @@ def photometry(demo):
     st.sidebar.markdown(
         "Adjust the values below and the figures will be updated accordingly"
     )
-    # df = load_data_photometry(dataset, nb_free=nb_free, demo=demo)
-
     plot_type = st.sidebar.radio("Select a Type of plot", ["Summary Plots", "Trumpet Plots"])
     
     dataset = st.sidebar.radio(
@@ -33,6 +32,7 @@ def photometry(demo):
     )
 
     nb_free = None
+    compo = None
     if dataset == "single_sersic":
         dataset_params = single_sersic_params
     elif dataset == "realistic":
@@ -60,48 +60,33 @@ def photometry(demo):
             st.markdown("## Select at least one software to plot !")
             return 0
         
-        # #####  Fields OPTIONS ####
+    # #####  Fields OPTIONS ####
     all_fields = st.sidebar.checkbox("Plot all Fields")
     if all_fields:
-        fields = ['0', '1', '2', '3', '4']
+        fields = ['1', '2', '3', '4']
     else:
         fields = st.sidebar.multiselect(
             "Select fields to display",
-            ['0', '1', '2', '3', '4'],
+            ['1', '2', '3', '4'],
             default=['4'],
         )
         if len(fields) == 0:
             st.markdown("## Select at least one Field to plot !")
             return 0
-    
-    dfs = load_data_photometry(dataset, codes, nb_free, fields, demo)
-    # st.write(dfs)
-    if plot_type == 'Trumpet Plots':
-        for code in codes:
-            for field in fields:
-                cat = dfs[f'{code}_{field}']
-                fig = plt.figure()
-                plt.scatter(cat[:, 0], cat[:, 1], c=cat[:, 2], marker='.', cmap='gist_rainbow', s=1)
-                plt.ylim([-1, 1])
-                plt.colorbar().set_label(label='BT',size=20)
-                plt.title(f'{LABELS[code]}, Field {field}')
-                xbins = np.linspace(14, 26, 11)
-                means = []
-                stds = []
-                for i, mag in enumerate(xbins[:-1]):
-                    sub_cat = cat[np.where((cat[:, 0] > mag)  &
-                    (cat[:, 0]  < xbins[i+1])), 1]
-                    mean = np.mean(sub_cat)
-                    std = np.std(sub_cat)
-                    means.append(mean)
-                    stds.append(std)
-                print(len(xbins), len(means))
-                plt.errorbar(xbins[:-1], means, stds)
-                plt.xlabel('$I_{\mathrm{\mathsf{E}}}$ true magnitude', fontsize=20)
-                plt.ylabel("$I_{\mathrm{\mathsf{E}}} \delta f$", fontsize=20)
 
-                st.write(code, field)
-                st.pyplot(fig)
+    # #####  Composant OPTIONS ####
+    if dataset == "double_sersic":
+        compo = st.sidebar.radio("Select the composante", ['total', 'bulge', 'disk'])
+    
+    
+    dfs = load_data_photometry(dataset, codes, nb_free, fields, demo, compo)
+
+    if plot_type == 'Trumpet Plots':
+        figure = photo_trumpet_plots(dfs, codes, fields, LABELS)
+        # st.pyplot(figure)
+    elif plot_type == 'Summary Plots':
+        st.markdown("### Not implemented yet")
+        return 0
 
 def morphology(demo):
 
@@ -299,13 +284,22 @@ def main():
         "Demo version (much faster). Uncheck when all set to get the full results.",
         value=True,
     )
-    st.title("MorphoChallenge DIY plots \n ### Select between Photometry (Paper 1) and Morphology (Paper 2)")
+    st.title("MorphoChallenge DIY plots \n #### Select between Photometry (Part 1) and Morphology (Part 2)")
 
-    paper = st.radio("", ['Morphology', 'Photometry'])
-    if paper == 'Photometry':
-        photometry(demo)
-    else:
+    # paper = st.radio("", ['Morphology', 'Photometry'])
+    col1, col2 = st.columns(2)
+    with col1:
+        morpho = st.checkbox('Morphology')
+    with col2:
+        photo = st.checkbox('Photometry')
+    if morpho:
         morphology(demo)
+    if photo:
+        photometry(demo=False)
+    # if paper == 'Photometry':
+    #     photometry(demo)
+    # else:
+    #     morphology(demo)
 
 if __name__ == "__main__":
     main()

@@ -109,17 +109,26 @@ def save_results(results, dataset, nb_free):
     return filepath
 
 
-def load_data_photometry(dataset, codes, nb_free, fields, demo, bands=None):
-    if dataset == 'single_sersic':
+def load_data_photometry(dataset, codes, nb_free, fields, demo, composant=None, bands=None):
+    if dataset in ['single_sersic', 'realistic']:
         nb_free_prefix = ""
+        composant_prefix = ""
     else:
-        nb_free_prefix = "_bf" if nb_free else "_nb4"
+        nb_free_prefix = "_bf" if nb_free else "_b4"
+        composant_prefix = f'_{composant}'
     cats = {}
     for code in codes:
+        if code == 'deepleg':
+            nb_free_prefix = ""
+        elif ((dataset == 'double_sersic') & (code != 'deepleg')):
+            nb_free_prefix = "_bf" if nb_free else "_b4"
+
         for field in fields:
             band = "" if bands is None else f"_{band}"
-
-            filename = f"data/plots_photometry/{code}_{dataset}{nb_free_prefix}/{code}_{dataset}{nb_free_prefix}_{field}.dat"
+            if code in ['SE++']:
+                filename = f"data/plots_photometry/{code}_{dataset}{nb_free_prefix}/{code}_{dataset}{nb_free_prefix}_{field}{composant_prefix}.dat"
+            else:
+                filename = f"data/plots_photometry/{code}_{dataset}{nb_free_prefix}/{code}_{dataset}_{field}{nb_free_prefix}{composant_prefix}.dat"
             # print(filename)
 
             # if not os.path.exists(filename):
