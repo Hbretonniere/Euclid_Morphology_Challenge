@@ -1,7 +1,7 @@
 import streamlit as st
 
 import numpy as np
-from app.io import load_data, save_results
+from app.io import load_data, save_results, load_data_photometry
 from app.help import readme
 from app.params import (
     single_sersic_params,
@@ -13,12 +13,95 @@ from app.params import (
 )
 from app.summary import summary, summary2D, trumpet, score, error_calibration, bt_multiband
 from app.utils import get_x_axis_range
+import matplotlib.pyplot as plt
 
 DATASETS = ("single_sersic", "double_sersic", "realistic", "multiband")
 PARAMETERS_2D = ["re", "q"]
 
 def photometry(demo):
-    st.write('photo')
+
+    st.sidebar.markdown("## Controls")
+    st.sidebar.markdown(
+        "Adjust the values below and the figures will be updated accordingly"
+    )
+    # df = load_data_photometry(dataset, nb_free=nb_free, demo=demo)
+
+    plot_type = st.sidebar.radio("Select a Type of plot", ["Summary Plots", "Trumpet Plots"])
+    
+    dataset = st.sidebar.radio(
+        "Select a Dataset", DATASETS, format_func=lambda x: LABELS[x]
+    )
+
+    nb_free = None
+    if dataset == "single_sersic":
+        dataset_params = single_sersic_params
+    elif dataset == "realistic":
+        dataset_params = realistic_params
+    elif dataset == "double_sersic":
+        dataset_params = double_sersic_params
+    elif dataset == "multiband":
+        dataset_params = multiband_params
+    if nb_free:
+        dataset_params = double_sersic_free_params
+        nb_free = st.sidebar.checkbox("Use free bulge Sersic fit")
+
+    # #####  SOFTWARE OPTIONS ####
+    all_code = st.sidebar.checkbox("Plot all software")
+    if all_code:
+        codes = dataset_params["available_codes"]
+    else:
+        codes = st.sidebar.multiselect(
+            "Select software to display",
+            dataset_params["available_codes"],
+            default=dataset_params["available_codes"],
+            format_func=lambda x: LABELS[x+'_'],
+        )
+        if len(codes) == 0:
+            st.markdown("## Select at least one software to plot !")
+            return 0
+        
+        # #####  Fields OPTIONS ####
+    all_fields = st.sidebar.checkbox("Plot all Fields")
+    if all_fields:
+        fields = ['0', '1', '2', '3', '4']
+    else:
+        fields = st.sidebar.multiselect(
+            "Select fields to display",
+            ['0', '1', '2', '3', '4'],
+            default=['4'],
+        )
+        if len(fields) == 0:
+            st.markdown("## Select at least one Field to plot !")
+            return 0
+    
+    dfs = load_data_photometry(dataset, codes, nb_free, fields, demo)
+    # st.write(dfs)
+    if plot_type == 'Trumpet Plots':
+        for code in codes:
+            for field in fields:
+                cat = dfs[f'{code}_{field}']
+                fig = plt.figure()
+                plt.scatter(cat[:, 0], cat[:, 1], c=cat[:, 2], marker='.', cmap='gist_rainbow', s=1)
+                plt.ylim([-1, 1])
+                plt.colorbar().set_label(label='BT',size=20)
+                plt.title(f'{LABELS[code]}, Field {field}')
+                xbins = np.linspace(14, 26, 11)
+                means = []
+                stds = []
+                for i, mag in enumerate(xbins[:-1]):
+                    sub_cat = cat[np.where((cat[:, 0] > mag)  &
+                    (cat[:, 0]  < xbins[i+1])), 1]
+                    mean = np.mean(sub_cat)
+                    std = np.std(sub_cat)
+                    means.append(mean)
+                    stds.append(std)
+                print(len(xbins), len(means))
+                plt.errorbar(xbins[:-1], means, stds)
+                plt.xlabel('$I_{\mathrm{\mathsf{E}}}$ true magnitude', fontsize=20)
+                plt.ylabel("$I_{\mathrm{\mathsf{E}}} \delta f$", fontsize=20)
+
+                st.write(code, field)
+                st.pyplot(fig)
 
 def morphology(demo):
 
@@ -179,7 +262,6 @@ def morphology(demo):
                 show_scores=show_scores,
                 bd_together=bd_together,
             )
-            # st.write(results)
         elif plot_type == "Trumpet Plots":
             results = trumpet(df, params, codes, x_axis, xs , n_bins, outliers, y_lims)
         elif plot_type == "2D Summary Plots":
@@ -213,11 +295,11 @@ def main():
     description = st.expander("README")
     description.markdown(readme)
 
-    st.title("MorphoChallenge DIY plots \n ### Select between Photometry (Paper 1) and Morphology (Paper 2)")
     demo = st.checkbox(
         "Demo version (much faster). Uncheck when all set to get the full results.",
         value=True,
     )
+    st.title("MorphoChallenge DIY plots \n ### Select between Photometry (Paper 1) and Morphology (Paper 2)")
 
     paper = st.radio("", ['Morphology', 'Photometry'])
     if paper == 'Photometry':

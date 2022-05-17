@@ -3,6 +3,7 @@ import pickle
 import numpy as np
 from astropy.table import Table
 import streamlit as st
+import pandas as pd
 
 RESULTS_DIR = "results"
 
@@ -106,3 +107,30 @@ def save_results(results, dataset, nb_free):
         pickle.dump(results, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
     return filepath
+
+
+def load_data_photometry(dataset, codes, nb_free, fields, demo, bands=None):
+    if dataset == 'single_sersic':
+        nb_free_prefix = ""
+    else:
+        nb_free_prefix = "_bf" if nb_free else "_nb4"
+    cats = {}
+    for code in codes:
+        for field in fields:
+            band = "" if bands is None else f"_{band}"
+
+            filename = f"data/plots_photometry/{code}_{dataset}{nb_free_prefix}/{code}_{dataset}{nb_free_prefix}_{field}.dat"
+            # print(filename)
+
+            # if not os.path.exists(filename):
+            #     st.markdown('# Downloading the catalogues, can take some time...')
+            #     os.system('zenodo_get -o ./data/ 10.5281/zenodo.6421906')
+            
+            # cat = pd.read_fwf(filename)
+            cat = np.loadtxt(filename)
+            if demo:
+                cat = cat[::100]
+                
+            cats[f'{code}_{field}'] = cat
+
+    return cats
