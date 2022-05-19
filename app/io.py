@@ -112,7 +112,13 @@ def save_results(results, dataset, nb_free):
 
 
 def load_data_photometry(dataset, codes, nb_free, fields, demo, composant=None, bands=None):
-    hf = h5py.File('data/EMC_photometry.hdf5', 'r')
+    
+    try:
+        hf = h5py.File('data/EMC_photometry.hdf5', 'r')
+    except:
+        st.markdown('# Downloading the catalogues, can take some time...')
+        os.system('zenodo_get -o ./data/ 10.5281/zenodo.6421906')
+        
     if dataset in ['single_sersic', 'realistic']:
         nb_free_prefix = ""
         composant_prefix = ""
@@ -148,11 +154,7 @@ def load_data_photometry(dataset, codes, nb_free, fields, demo, composant=None, 
                         cat = cat[::100]
                 
                     cats[f'{code}_{band}'] = cat
-            # if not os.path.exists(filename):
-            #     st.markdown('# Downloading the catalogues, can take some time...')
-            #     os.system('zenodo_get -o ./data/ 10.5281/zenodo.6421906')
-            
-            # cat = np.loadtxt(filename)
+
             
 
     return cats
