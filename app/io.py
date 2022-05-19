@@ -118,6 +118,7 @@ def load_data_photometry(dataset, codes, nb_free, fields, demo, composant=None, 
     except:
         st.markdown('# Downloading the catalogues, can take some time...')
         os.system('zenodo_get -o ./data/ 10.5281/zenodo.6421906')
+        hf = h5py.File('data/EMC_photometry.hdf5', 'r')
         
     if dataset in ['single_sersic', 'realistic']:
         nb_free_prefix = ""
