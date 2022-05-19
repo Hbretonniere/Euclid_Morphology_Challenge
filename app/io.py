@@ -4,6 +4,8 @@ import numpy as np
 from astropy.table import Table
 import streamlit as st
 import pandas as pd
+import h5py
+from astropy.io import ascii as astro_ascii
 
 RESULTS_DIR = "results"
 
@@ -110,6 +112,7 @@ def save_results(results, dataset, nb_free):
 
 
 def load_data_photometry(dataset, codes, nb_free, fields, demo, composant=None, bands=None):
+    hf = h5py.File('data/EMC_photometry.hdf5', 'r')
     if dataset in ['single_sersic', 'realistic']:
         nb_free_prefix = ""
         composant_prefix = ""
@@ -117,29 +120,55 @@ def load_data_photometry(dataset, codes, nb_free, fields, demo, composant=None, 
         nb_free_prefix = "_bf" if nb_free else "_b4"
         composant_prefix = f'_{composant}'
     cats = {}
+    if dataset == 'multiband':
+        fields = [0]
     for code in codes:
-        if code == 'deepleg':
-            nb_free_prefix = ""
-        elif ((dataset == 'double_sersic') & (code != 'deepleg')):
+        # if code == 'deepleg':
+            # nb_free_prefix = ""
+        if dataset == 'double_sersic':
             nb_free_prefix = "_bf" if nb_free else "_b4"
 
         for field in fields:
-            band = "" if bands is None else f"_{band}"
-            if code in ['SE++']:
-                filename = f"data/plots_photometry/{code}_{dataset}{nb_free_prefix}/{code}_{dataset}{nb_free_prefix}_{field}{composant_prefix}.dat"
+            if bands == None:
+                if code == 'deepleg':
+                    name = f"{code}_{dataset}/{code}_{dataset}_{field}{nb_free_prefix}{composant_prefix}"
+                else:
+                    name = f"{code}_{dataset}{nb_free_prefix}/{code}_{dataset}_{field}{nb_free_prefix}{composant_prefix}"
+                cat = hf[name].value
+                if demo:
+                    cat = cat[::100]
+                
+                cats[f'{code}_{field}'] = cat
             else:
-                filename = f"data/plots_photometry/{code}_{dataset}{nb_free_prefix}/{code}_{dataset}_{field}{nb_free_prefix}{composant_prefix}.dat"
-            # print(filename)
-
+                for band in bands:
+                    name = f"{code}_{dataset}/{code}_{dataset}_{band}{nb_free_prefix}{composant_prefix}"
+                    # st.write(name)
+                    cat = hf[name].value
+                    if demo:
+                        cat = cat[::100]
+                
+                    cats[f'{code}_{band}'] = cat
             # if not os.path.exists(filename):
             #     st.markdown('# Downloading the catalogues, can take some time...')
             #     os.system('zenodo_get -o ./data/ 10.5281/zenodo.6421906')
             
-            # cat = pd.read_fwf(filename)
-            cat = np.loadtxt(filename)
-            if demo:
-                cat = cat[::100]
-                
-            cats[f'{code}_{field}'] = cat
+            # cat = np.loadtxt(filename)
+            
 
     return cats
+
+def import_TU_std():
+    
+    e = astro_ascii.read('./data/TU_std_15bins14-28_bands.dat')
+
+    TUstds={} 
+    TUstds['lsst_u']=np.lib.recfunctions.structured_to_unstructured(np.array(e[1]))
+    TUstds['lsst_g']=np.lib.recfunctions.structured_to_unstructured(np.array(e[2]))
+    TUstds['lsst_r']=np.lib.recfunctions.structured_to_unstructured(np.array(e[3]))
+    TUstds['lsst_i']=np.lib.recfunctions.structured_to_unstructured(np.array(e[4]))
+    TUstds['lsst_z']=np.lib.recfunctions.structured_to_unstructured(np.array(e[5]))
+    TUstds['vis']=np.lib.recfunctions.structured_to_unstructured(np.array(e[6]))
+    TUstds['nir_y']=np.lib.recfunctions.structured_to_unstructured(np.array(e[7]))
+    TUstds['nir_j']=np.lib.recfunctions.structured_to_unstructured(np.array(e[8]))
+    TUstds['nir_h']=np.lib.recfunctions.structured_to_unstructured(np.array(e[9]))
+    return TUstds

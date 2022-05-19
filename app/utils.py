@@ -1,6 +1,6 @@
 import numpy as np
 import streamlit as st
-
+from astropy.io import ascii
 
 def compute_snr_weights(mag_bins, order=3):
     TU_mags = np.linspace(16, 26, 11)

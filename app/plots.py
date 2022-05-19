@@ -1039,35 +1039,115 @@ def summary_plot2D(codes, param, summary2D, mag_bins, bt_bins, labels):
     return fig
 
 
-def photo_trumpet_plots(cats, codes, fields, LABELS):
+def photo_trumpet_plots(cats, codes, fields, LABELS, TU_std, compo=None, nb_free=None):
     
     for field in fields:
         nb_lines = int(np.ceil(len(codes) / 2))
-        fig, ax = plt.subplots(nb_lines, 2, figsize=(5*nb_lines*1.4, 5*nb_lines))
+        fig, ax = plt.subplots(nb_lines, 2, figsize=(5*nb_lines*1.3, 5*nb_lines))
         ax = ax.flatten()
-        plt.subplots_adjust(hspace=0.4)
+        fst=18
+        plt.subplots_adjust(wspace=0.2, hspace=0.5)
         p = 0
         for code in codes:
             cat = cats[f'{code}_{field}']
             a = ax[p].scatter(cat[:, 0], cat[:, 1], c=cat[:, 2], marker='.', cmap='gist_rainbow', s=1)
             ax[p].set_ylim([-1, 1])
             plt.colorbar(a, ax=ax[p]).set_label(label='BT', size=20)
-            ax[p].set_title(f'{LABELS[code]}, Field {field}', fontsize=20)
+            if compo in ['bulge', 'disk']:
+                if nb_free:
+                    ax[p].set_title(f'{LABELS[code]}, \n Field {field}, {compo} component, bulge free', fontsize=fst)
+                else:
+                    ax[p].set_title(f'{LABELS[code]}, \n Field {field}, {compo} component, bulge fixed', fontsize=fst)
+            elif compo == 'total':
+                if nb_free:
+                    ax[p].set_title(f'{LABELS[code]}, \n Field {field}, entire galaxy, bulge free', fontsize=fst)
+                else:
+                    ax[p].set_title(f'{LABELS[code]}, \n Field {field}, entire galaxy, bulge fixed', fontsize=fst)
+            else:
+                ax[p].set_title(f'{LABELS[code]}, \n Field {field}', fontsize=fst)
+            
             xbins = np.linspace(14, 26, 11)
+            xbins_plot = np.linspace(14, 26, 11)
             means = []
             stds = []
             for i, mag in enumerate(xbins[:-1]):
-                sub_cat = cat[np.where((cat[:, 0] > mag)  &
-                (cat[:, 0]  < xbins[i+1])), 1]
-                mean = np.mean(sub_cat)
-                std = np.std(sub_cat)
+                if i == 0:
+                    continue
+                indices_mag = np.where((cat[:, 0] > mag)  & (cat[:, 0]  < xbins[i+1]))[0]
+                sub_cat = cat[indices_mag]
+                if len(sub_cat) == 0:
+                    xbins_plot = np.delete(xbins_plot, i)
+                    continue
+                indices_in = np.where(sub_cat[:, 1] < 5 * TU_std['vis'][i])
+                sub_cat = sub_cat[indices_in]
+                mean = np.nanmean(sub_cat[:, 1])
+                std = np.nanstd(sub_cat[:, 1])
                 means.append(mean)
                 stds.append(std)
+
+            ax[p].errorbar(xbins_plot[2:-1], means[1:], stds[1:], c='black')
+            ax[p].set_xlabel('$I_{\mathrm{\mathsf{E}}}$ true magnitude', fontsize=20)
+            ax[p].set_ylabel("$\delta f(I_{\mathrm{\mathsf{E}}})$", fontsize=20)
+            ax[p].tick_params(axis='both', labelsize=15)
+            ax[p].set_xlim([16, 26])
+            p += 1
+    
+        if len(codes) % 2 != 0:
+            ax[-1].set_visible(False)
+        st.pyplot(fig)
+    return 0
+
+def photo_trumpet_plots_multi_band(cats, codes, bands, LABELS, TU_std, compo, nb_free):
+    
+    for band in bands:
+        nb_lines = int(np.ceil(len(codes) / 2))
+        print(nb_lines)
+        fig, ax = plt.subplots(nb_lines, 2, figsize=(7*(nb_lines+1), 7*nb_lines))
+        ax = ax.flatten()
+        plt.subplots_adjust(hspace=0.4)
+        p = 0
+        fst=18
+        for code in codes:
+            cat = cats[f'{code}_{band}']
+            a = ax[p].scatter(cat[:, 0], cat[:, 1], c=cat[:, 2], marker='.', cmap='gist_rainbow', s=1)
+            ax[p].set_ylim([-1, 1])
+            plt.colorbar(a, ax=ax[p]).set_label(label='BT', size=20)
+            if compo in ['bulge', 'disk']:
+                if nb_free:
+                    ax[p].set_title(f'{LABELS[code]}, \n $\mathrm{{{band}}}$, {compo} component, bulge free', fontsize=fst)
+                else:
+                    ax[p].set_title(f'{LABELS[code]}, \n $\mathrm{{{band}}}$, {compo} component, bulge fixed', fontsize=fst)
+            elif compo == 'total':
+                if nb_free:
+                    ax[p].set_title(f'{LABELS[code]}, \n $\mathrm{{{band}}}$, entire galaxy, bulge free', fontsize=fst)
+                else:
+                    ax[p].set_title(f'{LABELS[code]}, \n  $\mathrm{{{band}}}$, entire galaxy, bulge fixed', fontsize=fst)
+
+            xbins = np.linspace(14, 26, 11)
+            xbins_plot = np.linspace(14, 26, 11)
+            means = []
+            stds = []
+            for i, mag in enumerate(xbins[:-1]):
+                if i == 0:
+                    continue
+                indices_mag = np.where((cat[:, 0] > mag)  & (cat[:, 0]  < xbins[i+1]))[0]
+                sub_cat = cat[indices_mag]
+                if len(sub_cat) == 0:
+                    xbins_plot = np.delete(xbins_plot, i)
+                    continue
+                indices_in = np.where(sub_cat[:, 1] < 5 * TU_std['vis'][i])
+                sub_cat = sub_cat[indices_in]
+                mean = np.nanmean(sub_cat[:, 1])
+                std = np.nanstd(sub_cat[:, 1])
+                means.append(mean)
+                stds.append(std)
+
             # print(len(xbins), len(means))
-            ax[p].errorbar(xbins[:-1], means, stds)
+            ax[p].errorbar(xbins_plot[2:-1], means[1:], stds[1:], c='black')
             ax[p].set_xlabel('$I_{\mathrm{\mathsf{E}}}$ true magnitude', fontsize=20)
             ax[p].set_ylabel("$I_{\mathrm{\mathsf{E}}}$  $\delta f$", fontsize=20)
             ax[p].tick_params(axis='both', labelsize=15)
+            ax[p].set_xlim([16, 27])
             p += 1
     
         if len(codes) % 2 != 0:

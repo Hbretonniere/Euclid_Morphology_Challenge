@@ -1,7 +1,7 @@
 import streamlit as st
 
 import numpy as np
-from app.io import load_data, save_results, load_data_photometry
+from app.io import load_data, save_results, load_data_photometry, import_TU_std
 from app.help import readme
 from app.params import (
     single_sersic_params,
@@ -9,10 +9,11 @@ from app.params import (
     double_sersic_free_params,
     realistic_params,
     multiband_params,
+    multiband_params_nbfix,
     LABELS,
 )
 from app.summary import summary, summary2D, trumpet, score, error_calibration, bt_multiband
-from app.plots import photo_trumpet_plots
+from app.plots import photo_trumpet_plots, photo_trumpet_plots_multi_band
 from app.utils import get_x_axis_range
 import matplotlib.pyplot as plt
 
@@ -33,20 +34,37 @@ def photometry(demo):
 
     nb_free = None
     compo = None
+    bands = None
     if dataset == "single_sersic":
         dataset_params = single_sersic_params
     elif dataset == "realistic":
         dataset_params = realistic_params
     elif dataset == "double_sersic":
         dataset_params = double_sersic_params
+        nb_free = st.sidebar.checkbox("Use free bulge Sersic fit")
+        if nb_free:
+            dataset_params = double_sersic_free_params
+        
     elif dataset == "multiband":
         dataset_params = multiband_params
-    if nb_free:
-        dataset_params = double_sersic_free_params
         nb_free = st.sidebar.checkbox("Use free bulge Sersic fit")
+        if not nb_free:
+            dataset_params = multiband_params_nbfix
+        bands = st.sidebar.multiselect(
+                "Select Bands to display",
+                dataset_params["bands_photo"],
+                default=dataset_params["bands_photo"],
+                # format_func=lambda x: LABELS[x],
+            )
+
+    # #####  Composant OPTIONS ####
+    if dataset in ["double_sersic", "multiband"]:
+        compo = st.sidebar.radio("Select the composante", ['total', 'bulge', 'disk'])
+    
 
     # #####  SOFTWARE OPTIONS ####
     all_code = st.sidebar.checkbox("Plot all software")
+        
     if all_code:
         codes = dataset_params["available_codes"]
     else:
@@ -61,29 +79,29 @@ def photometry(demo):
             return 0
         
     # #####  Fields OPTIONS ####
-    all_fields = st.sidebar.checkbox("Plot all Fields")
-    if all_fields:
-        fields = ['1', '2', '3', '4']
-    else:
-        fields = st.sidebar.multiselect(
-            "Select fields to display",
-            ['1', '2', '3', '4'],
-            default=['4'],
-        )
-        if len(fields) == 0:
-            st.markdown("## Select at least one Field to plot !")
-            return 0
+    fields = None
+    if dataset != 'multiband':
+        all_fields = st.sidebar.checkbox("Plot all Fields")
+        if all_fields:
+            fields = ['1', '2', '3', '4']
+        else:
+            fields = st.sidebar.multiselect(
+                "Select fields to display",
+                ['1', '2', '3', '4'],
+                default=['4'],
+            )
+            if len(fields) == 0:
+                st.markdown("## Select at least one Field to plot !")
+                return 0
 
-    # #####  Composant OPTIONS ####
-    if dataset == "double_sersic":
-        compo = st.sidebar.radio("Select the composante", ['total', 'bulge', 'disk'])
-    
-    
-    dfs = load_data_photometry(dataset, codes, nb_free, fields, demo, compo)
-
+    dfs = load_data_photometry(dataset, codes, nb_free, fields, demo, compo, bands)
+    TU_stds = import_TU_std()
     if plot_type == 'Trumpet Plots':
-        figure = photo_trumpet_plots(dfs, codes, fields, LABELS)
-        # st.pyplot(figure)
+        if dataset == 'multiband':
+            st.write('multi')
+            photo_trumpet_plots_multi_band(dfs, codes, bands, LABELS, TU_stds, compo, nb_free)
+        else:
+            photo_trumpet_plots(dfs, codes, fields, LABELS, TU_stds, compo, nb_free)
     elif plot_type == 'Summary Plots':
         st.markdown("### Not implemented yet")
         return 0

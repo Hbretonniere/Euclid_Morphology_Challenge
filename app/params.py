@@ -68,7 +68,32 @@ multiband_params = {
         "Error Prediction": 4,
     },
     "bands":['u_lsst', 'g_lsst', 'r_lsst', 'i_lsst', 'vis', 'z_lsst', 'y_nir', 'j_nir', 'h_nir'],
+    "bands_photo":['lsst_u', 'lsst_g', 'lsst_r', 'lsst_i', 'vis', 'lsst_z', 'nir_y', 'nir_j', 'nir_h']
     }
+
+multiband_params_nbfix = {
+    "available_params": {
+        "Summary Plots": ["re", "q", "bt"],
+        "2D Summary Plots": ["re", "q"],
+        "Summary Scores": ["re", "q", "bt"],
+        "Trumpet Plots": ["reb", "red", "qb", "qd", "bt"],
+        "Error Prediction": ["reb", "red", "qb", "qd"],
+    },
+    "available_codes": ["gala", "profit"],
+    "plot_types": [
+        "Summary Plots"
+    ],
+    "default bins": {
+        "Summary Plots": 11,
+        "2D Summary Plots": 5,
+        "Summary Scores": 6,
+        "Trumpet Plots": 6,
+        "Error Prediction": 4,
+    },
+    "bands":['u_lsst', 'g_lsst', 'r_lsst', 'i_lsst', 'vis', 'z_lsst', 'y_nir', 'j_nir', 'h_nir'],
+    "bands_photo":['lsst_u', 'lsst_g', 'lsst_r', 'lsst_i', 'vis', 'lsst_z', 'nir_y', 'nir_j', 'nir_h']
+    }
+
 
 realistic_params = {
     "available_params": {
