@@ -2,6 +2,6 @@ astropy
 zenodo_get
 matplotlib
 h5py
-LaTex
-dvipng
-Ghostscript
+latex
+# dvipng
+# Ghostscript
