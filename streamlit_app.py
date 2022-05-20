@@ -20,8 +20,12 @@ import matplotlib.pyplot as plt
 DATASETS = ("single_sersic", "double_sersic", "realistic", "multiband")
 PARAMETERS_2D = ["re", "q"]
 
-def photometry(demo):
+def photometry():
 
+    demo = st.checkbox(
+        "Demo version (much faster). Uncheck when all set to get the full results.",
+        value=False,
+    )
     st.sidebar.markdown("## Controls")
     st.sidebar.markdown(
         "Adjust the values below and the figures will be updated accordingly"
@@ -106,7 +110,12 @@ def photometry(demo):
         st.markdown("### Not implemented yet")
         return 0
 
-def morphology(demo):
+def morphology():
+
+    demo = st.checkbox(
+        "Demo version (much faster). Uncheck when all set to get the full results.",
+        value=True,
+    )
 
     nb_free = False
     band = None
@@ -298,10 +307,6 @@ def main():
     description = st.expander("README")
     description.markdown(readme)
 
-    demo = st.checkbox(
-        "Demo version (much faster). Uncheck when all set to get the full results.",
-        value=True,
-    )
     st.title("MorphoChallenge DIY plots \n #### Select between Photometry (Part 1) and Morphology (Part 2)")
 
     # paper = st.radio("", ['Morphology', 'Photometry'])
@@ -311,9 +316,9 @@ def main():
     with col2:
         photo = st.checkbox('Photometry')
     if morpho:
-        morphology(demo)
+        morphology()
     if photo:
-        photometry(demo=False)
+        photometry()
     # if paper == 'Photometry':
     #     photometry(demo)
     # else:
