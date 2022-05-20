@@ -65,7 +65,7 @@ def load_data(dataset, band=None, nb_free=False, demo=False):
 
     if not os.path.exists(filename):
         st.markdown('# Downloading the catalogues, can take some time...')
-        os.system('zenodo_get -o ./data/ 10.5281/zenodo.6421906')
+        os.system('zenodo_get -o ./data/ 10.5281/zenodo.6421905')
     
     cat = read_catalogue(filename)
 
@@ -117,7 +117,7 @@ def load_data_photometry(dataset, codes, nb_free, fields, demo, composant=None, 
         hf = h5py.File('data/EMC_photometry.hdf5', 'r')
     except:
         st.markdown('# Downloading the catalogues, can take some time...')
-        os.system('zenodo_get -o ./data/ 10.5281/zenodo.6421906')
+        os.system('zenodo_get -o ./data/ 10.5281/zenodo.6421905')
         hf = h5py.File('data/EMC_photometry.hdf5', 'r')
         
     if dataset in ['single_sersic', 'realistic']:
