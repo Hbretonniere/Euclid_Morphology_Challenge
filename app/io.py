@@ -141,7 +141,7 @@ def load_data_photometry(dataset, codes, nb_free, fields, demo, composant=None, 
                     name = f"{code}_{dataset}/{code}_{dataset}_{field}{nb_free_prefix}{composant_prefix}"
                 else:
                     name = f"{code}_{dataset}{nb_free_prefix}/{code}_{dataset}_{field}{nb_free_prefix}{composant_prefix}"
-                cat = hf[name].value
+                cat = hf[name][()]
                 if demo:
                     cat = cat[::100]
                 
@@ -150,7 +150,7 @@ def load_data_photometry(dataset, codes, nb_free, fields, demo, composant=None, 
                 for band in bands:
                     name = f"{code}_{dataset}/{code}_{dataset}_{band}{nb_free_prefix}{composant_prefix}"
                     # st.write(name)
-                    cat = hf[name].value
+                    cat = hf[name][()]
                     if demo:
                         cat = cat[::100]
                 

@@ -147,7 +147,7 @@ def trumpet_plot(
             grid_hist = fig.add_subplot(gs[line, 6:7])
             line += 1
         grid_hist.set_xticks([])
-        grid_scat.set_title(labels[code], fontsize=25, usetex=True)
+        grid_scat.set_title(labels[code], fontsize=25, usetex=False)
 
         code_cat, _ = sub_cat(cat, x_axis, x_range, 0)
         X_true = code_cat[x_axis]
@@ -190,7 +190,7 @@ def trumpet_plot(
         grid_scat.axhline(
             0.0, color="#0000CD", linestyle="-", linewidth=1.3
         )
-        grid_hist.set_xlabel('Density\ncount', fontsize=28, usetex=True)
+        grid_hist.set_xlabel('Density\ncount', fontsize=28, usetex=False)
         """ Plot the running mean  """
         x_min, x_max = x_range
         nb_bins = 6
@@ -249,61 +249,61 @@ def trumpet_plot(
         grid_scat.set_ylim(y_range[0], y_range[1])
         grid_hist.set_ylim(y_range[0], y_range[1])
         grid_scat.set_yticks(grid_scat.get_yticks()[::2])
-        grid_scat.set_yticklabels(grid_scat.get_yticks(), usetex=True)
+        grid_scat.set_yticklabels(grid_scat.get_yticks(), usetex=False)
         
         grid_scat.tick_params(axis="both", which="major", labelsize=25)
-        grid_scat.set_xlabel(labels[x_axis], fontsize=24, usetex=True)
+        grid_scat.set_xlabel(labels[x_axis], fontsize=24, usetex=False)
 
         grid_scat.set_xticks(x_bins[::2])
-        grid_scat.set_xticklabels(np.round(grid_scat.get_xticks(), 1), usetex=True, fontsize=22)
-        grid_scat.set_yticklabels(np.round(grid_scat.get_yticks(), 2), usetex=True, fontsize=22)
+        grid_scat.set_xticklabels(np.round(grid_scat.get_xticks(), 1), usetex=False, fontsize=22)
+        grid_scat.set_yticklabels(np.round(grid_scat.get_yticks(), 2), usetex=False, fontsize=22)
 
         if param == 'n':
             grid_scat.set_ylabel(
                 r"$\mathrm{Pred}_{\log_{\mathrm{10}}({n})} - \mathrm{True}_{\log_{\mathrm{10}}({n})} $",
-                fontsize=25, usetex=True
+                fontsize=25, usetex=False
             )
         elif param == 'q':
             grid_scat.set_ylabel(
                 r"$\mathrm{Pred}_{q} - \mathrm{True}_{q} $",
-                fontsize=25, usetex=True
+                fontsize=25, usetex=False
             )
         elif param == 're':
             grid_scat.set_ylabel(
                 r'$\frac{\mathrm{Pred}_{\mathrm{r_{e}}} - \mathrm{True}_{r_{\mathrm{e}}}}{\mathrm{True}_{r_{\mathrm{e}}}} $',
-                fontsize=35, usetex=True
+                fontsize=35, usetex=False
             )
         elif param == 'red':
             grid_scat.set_ylabel(
                 r'$\frac{\mathrm{Pred}_{r_{\mathrm{e, d}}} - \mathrm{True}_{r_{\mathrm{e, d}}}}{\mathrm{True}_{r_{\mathrm{e, d}}}} $',
-                fontsize=35, usetex=True
+                fontsize=35, usetex=False
             )
         elif param == 'reb':
             grid_scat.set_ylabel(
                 r'$\frac{\mathrm{Pred}_{r_{\mathrm{e, b}}} - \mathrm{True}_{r_{\mathrm{e, b}}}}{\mathrm{True}_{r_{\mathrm{e, b}}}} $',
-                fontsize=35, usetex=True
+                fontsize=35, usetex=False
             )
         elif param == 'bt':
             grid_scat.set_ylabel(
                 f"$\mathrm{{Pred_{{b/t}}}} - \mathrm{{True_{{b/t}}}}$",
-                fontsize=30, usetex=True
+                fontsize=30, usetex=False
             )
         
         elif param == 'qb':
             grid_scat.set_ylabel(
                 r'$\mathrm{Pred}_{q_{\mathrm{b}}} - \mathrm{True}_{q_{\mathrm{b}}}$',
-                fontsize=30, usetex=True
+                fontsize=30, usetex=False
             )
         elif param == 'qd':
             grid_scat.set_ylabel(
                 r'$\mathrm{Pred}_{q_{\mathrm{d}}} - \mathrm{True}_{q_{\mathrm{d}}}$',
-                fontsize=30, usetex=True
+                fontsize=30, usetex=False
             )
         
         else:
             grid_scat.set_ylabel(
                 f"$\dfrac{{\mathrm{{Pred_{{{param}}}}} - \mathrm{{True_{{{param}}}}}}}{{\mathrm{{True_{{{param}}}}}}}$",
-                fontsize=35, usetex=True
+                fontsize=35, usetex=False
             )
         grid_scat.tick_params("both", length=3, width=1, which="minor")
         grid_scat.axhline(
@@ -450,11 +450,11 @@ def plot_error_prediction(dataset, calib_mag, params, codes, x_bins, labels):
         ax[i].set_box_aspect(1)
         ax[i].set_xticks(bins)
         ax[i].set_xticklabels(tick_labels, fontsize=16, rotation=45, usetex=False)
-        ax[i].set_xlabel("$I_{\mathrm{\mathsf{E}}}$ true magnitude", fontsize=20, usetex=True)
-        ax[i].set_ylabel("Fraction of well \n calibrated objects", fontsize=19, usetex=True)
-        ax[i].set_title(labels[param], fontsize=18, usetex=True)
+        ax[i].set_xlabel("$I_{\mathrm{\mathsf{E}}}$ true magnitude", fontsize=20, usetex=False)
+        ax[i].set_ylabel("Fraction of well \n calibrated objects", fontsize=19, usetex=False)
+        ax[i].set_title(labels[param], fontsize=18, usetex=False)
         ax[i].axhline(0.68, ls="--", color="red")
-        ax[i].text(0.1, 0.7, "0.68", size=20, usetex=True)
+        ax[i].text(0.1, 0.7, "0.68", size=20, usetex=False)
         ax[i].set_ylim([0, 0.9])
         
         fig.canvas.draw()
@@ -519,10 +519,10 @@ def plot_score(scores, labels):
     for param in scores.index.values:
         xlabels.append(labels[param])
 
-    ax.set_xticklabels(xlabels, rotation=45, usetex=True)
-    ax.set_ylabel(r"Global Score $\mathcal{S}$", fontsize=20, usetex=True)
+    ax.set_xticklabels(xlabels, rotation=45, usetex=False)
+    ax.set_ylabel(r"Global Score $\mathcal{S}$", fontsize=20, usetex=False)
     fig.canvas.draw()
-    ax.set_yticklabels(ax.get_yticklabels(), usetex=True)
+    ax.set_yticklabels(ax.get_yticklabels(), usetex=False)
     if max(scores.max()) > 20:
         ax.set_yscale("log")
     return fig
@@ -628,7 +628,7 @@ def summary_plot(
             for axe in ax.flatten()
         ]
         [
-            axe.set_xticklabels(np.round(np.linspace(x_bins[0], max_, 5), 1), fontsize=22, usetex=True)
+            axe.set_xticklabels(np.round(np.linspace(x_bins[0], max_, 5), 1), fontsize=22, usetex=False)
             for axe in ax.flatten()
         ]
     else:
@@ -642,15 +642,15 @@ def summary_plot(
             for axe in ax.flatten()
         ]
         [
-            axe.set_xticklabels(np.round(np.logspace(np.log10(x_bins[0]), np.log10(x_bins[-1]), 5), 2), fontsize=22, usetex=True)
+            axe.set_xticklabels(np.round(np.logspace(np.log10(x_bins[0]), np.log10(x_bins[-1]), 5), 2), fontsize=22, usetex=False)
             for axe in ax.flatten()
         ]
     legend_columns = 3
     fs = 25
-    [ax[-1, i].set_xlabel(labels[x_axis], fontsize=fs, usetex=True) for i in [0, 1, 2]]
-    ax[0, 0].set_title(r"Bias $\mathcal{B}$", fontsize=fs, usetex=True)
-    ax[0, 1].set_title(r"Dispersion $\mathcal{D}$", fontsize=fs, usetex=True)
-    ax[0, 2].set_title("Outlier Fraction $\mathcal{O}$", fontsize=fs, usetex=True)
+    [ax[-1, i].set_xlabel(labels[x_axis], fontsize=fs, usetex=False) for i in [0, 1, 2]]
+    ax[0, 0].set_title(r"Bias $\mathcal{B}$", fontsize=fs, usetex=False)
+    ax[0, 1].set_title(r"Dispersion $\mathcal{D}$", fontsize=fs, usetex=False)
+    ax[0, 2].set_title("Outlier Fraction $\mathcal{O}$", fontsize=fs, usetex=False)
     p = 0
     alpha = 0.55
     for p, param in enumerate(params):
@@ -703,11 +703,11 @@ def summary_plot(
                 
                 fig.canvas.draw()
                 axy_labels = [item.get_text() for item in ax[p, 0].get_yticklabels()]
-                ax[p, 0].set_yticklabels(axy_labels, usetex=True, fontsize=22)
+                ax[p, 0].set_yticklabels(axy_labels, usetex=False, fontsize=22)
                 axy_labels = [item.get_text() for item in ax[p, 1].get_yticklabels()]
-                ax[p, 1].set_yticklabels(axy_labels, usetex=True, fontsize=22)
+                ax[p, 1].set_yticklabels(axy_labels, usetex=False, fontsize=22)
                 axy_labels = [item.get_text() for item in ax[p, 2].get_yticklabels()]
-                ax[p, 2].set_yticklabels(axy_labels, usetex=True, fontsize=22)
+                ax[p, 2].set_yticklabels(axy_labels, usetex=False, fontsize=22)
 
 
                 if param == 'n':
@@ -716,7 +716,7 @@ def summary_plot(
                     label = f'$\log_{{{10}}}$ Bulge  \n Sérsic index'
                 else:
                     label = labels[param]
-                ax[p, 0].set_ylabel(label, color=c_legend, fontsize=fs, usetex=True)
+                ax[p, 0].set_ylabel(label, color=c_legend, fontsize=fs, usetex=False)
 
     if len(params) == 1:
 
@@ -741,7 +741,7 @@ def summary_plot(
         ax[-1, 0].set_visible(False)
         ax[-1, 1].set_visible(False)
         ax[-1, 2].set_visible(False)
-        [ax[0, 0].set_xlabel(labels[x_axis], fontsize=fs, usetex=True) for i in [0, 1, 2]]
+        [ax[0, 0].set_xlabel(labels[x_axis], fontsize=fs, usetex=False) for i in [0, 1, 2]]
 
     # else:
         # [axe.set_xticklabels([]) for axe in ax[:-1, :].flatten()]
@@ -812,10 +812,10 @@ def bt_multiband_plot(
     legend_columns = 3
 
     fs = 20
-    [ax[-1, i].set_xlabel('Bands', fontsize=fs, usetex=True) for i in [0, 1, 2]]
-    ax[0, 0].set_title(r"Bias $\mathcal{B}$", fontsize=fs, usetex=True)
-    ax[0, 1].set_title(r"Dispersion $\mathcal{D}$", fontsize=fs, usetex=True)
-    ax[0, 2].set_title("Outlier Fraction $\mathcal{O}$", fontsize=fs, usetex=True)
+    [ax[-1, i].set_xlabel('Bands', fontsize=fs, usetex=False) for i in [0, 1, 2]]
+    ax[0, 0].set_title(r"Bias $\mathcal{B}$", fontsize=fs, usetex=False)
+    ax[0, 1].set_title(r"Dispersion $\mathcal{D}$", fontsize=fs, usetex=False)
+    ax[0, 2].set_title("Outlier Fraction $\mathcal{O}$", fontsize=fs, usetex=False)
 
     [
         axe.axhline(
@@ -866,14 +866,14 @@ def bt_multiband_plot(
 
         p += 1
     
-    ax[0, 0].set_ylabel('Bright galaxies \n \n $\mathrm{{Pred_{{b/t}}}} - \mathrm{{True_{{b/t}}}} $', fontsize=23, usetex=True)
-    ax[1, 0].set_ylabel('Intermediate galaxies \n \n $\mathrm{{Pred_{{b/t}}}} - \mathrm{{True_{{b/t}}}} $', fontsize=23, usetex=True)
-    ax[2, 0].set_ylabel('Faint galaxies \n \n $\mathrm{{Pred_{{b/t}}}} - \mathrm{{True_{{b/t}}}} $', fontsize=23, usetex=True)
+    ax[0, 0].set_ylabel('Bright galaxies \n \n $\mathrm{{Pred_{{b/t}}}} - \mathrm{{True_{{b/t}}}} $', fontsize=23, usetex=False)
+    ax[1, 0].set_ylabel('Intermediate galaxies \n \n $\mathrm{{Pred_{{b/t}}}} - \mathrm{{True_{{b/t}}}} $', fontsize=23, usetex=False)
+    ax[2, 0].set_ylabel('Faint galaxies \n \n $\mathrm{{Pred_{{b/t}}}} - \mathrm{{True_{{b/t}}}} $', fontsize=23, usetex=False)
     fig.canvas.draw()
-    [ax.set_yticklabels(ax.get_yticklabels(), fontsize=19, usetex=True) for ax in ax.flatten()]
+    [ax.set_yticklabels(ax.get_yticklabels(), fontsize=19, usetex=False) for ax in ax.flatten()]
     [axe.set_xticks(np.arange(len(bands))) for axe in ax.flatten()]
     band_labels = [labels[band] for band in bands]
-    [axe.set_xticklabels(band_labels, rotation=45, fontsize=22, usetex=True) for axe in ax.flatten()]
+    [axe.set_xticklabels(band_labels, rotation=45, fontsize=22, usetex=False) for axe in ax.flatten()]
     if len(bands)==9:
         [axe.add_artist(Rectangle([-0.2, -1], 3.5, 3, fill=True, alpha=0.05, color='red')) for axe in ax.flatten()]
         [axe.add_artist(Rectangle([3.7, -1], 0.55, 3, fill=True, alpha=0.05, color='blue')) for axe in ax.flatten()]
@@ -972,15 +972,15 @@ def summary_plot2D(codes, param, summary2D, mag_bins, bt_bins, labels):
             cbar_std_ticks = np.linspace(min_cbar_std, max_cbar_std, 8)
 
         ax[i, 0].set_yticks(np.linspace(0, nb_bins_mag, nb_bins_mag + 1))
-        ax[i, 0].set_yticklabels(np.round(mag_bins, 1), fontsize=26, usetex=True)
+        ax[i, 0].set_yticklabels(np.round(mag_bins, 1), fontsize=26, usetex=False)
         ax[i, 0].set_xticks(np.linspace(0, nb_bins_bt, nb_bins_bt + 1)[:-1])
-        ax[i, 0].set_xticklabels(np.round(bt_bins[:-1], 1), fontsize=26, rotation=30, usetex=True)
-        ax[i, 0].set_title(f"{labels[code]} Bulges", fontsize=30, usetex=True)
-        ax[i, 0].set_xlabel(r"$I_{\mathrm{\mathsf{E}}}$ true b/t", fontsize=29, usetex=True)
-        ax[i, 0].set_ylabel(r"$I_{\mathrm{\mathsf{E}}}$ true magnitude", fontsize=33, usetex=True)
+        ax[i, 0].set_xticklabels(np.round(bt_bins[:-1], 1), fontsize=26, rotation=30, usetex=False)
+        ax[i, 0].set_title(f"{labels[code]} Bulges", fontsize=30, usetex=False)
+        ax[i, 0].set_xlabel(r"$I_{\mathrm{\mathsf{E}}}$ true b/t", fontsize=29, usetex=False)
+        ax[i, 0].set_ylabel(r"$I_{\mathrm{\mathsf{E}}}$ true magnitude", fontsize=33, usetex=False)
 
         cb = plt.colorbar(bulges, ax=ax[i, 0], cax=cax1)
-        cb.ax.set_title(r"$|\tilde{{\mathcal{B}}}|$", x=0.5, y=1.05, fontsize=fs_colorbar, usetex=True)
+        cb.ax.set_title(r"$|\tilde{{\mathcal{B}}}|$", x=0.5, y=1.05, fontsize=fs_colorbar, usetex=False)
         cb.ax.yaxis.set_ticks(cbar_ticks)
         cb.ax.yaxis.set_ticklabels(cbar_ticks, fontsize=25)
         cb.ax.yaxis.set_ticks_position("left")
@@ -989,7 +989,7 @@ def summary_plot2D(codes, param, summary2D, mag_bins, bt_bins, labels):
         cb_std = plt.colorbar(std_bulges, ax=ax[i, 0], cax=cax2)
         cb_std.ax.yaxis.set_ticks(cbar_std_ticks)
         cb_std.ax.yaxis.set_ticklabels(cbar_std_ticks, fontsize=25)
-        cb_std.ax.set_title(r"$\tilde{{\mathcal{D}}}$", x=0.6, y=1.05, fontsize=fs_colorbar, usetex=True)
+        cb_std.ax.set_title(r"$\tilde{{\mathcal{D}}}$", x=0.6, y=1.05, fontsize=fs_colorbar, usetex=False)
         cb_std.ax.yaxis.set_major_formatter(FormatStrFormatter("%.2f"))
 
         """ DISKS """
@@ -1005,16 +1005,16 @@ def summary_plot2D(codes, param, summary2D, mag_bins, bt_bins, labels):
         )
 
         ax[i, 1].set_yticks(np.linspace(0, nb_bins_mag, nb_bins_mag + 1))
-        ax[i, 1].set_yticklabels(np.round(mag_bins, 1), fontsize=26, usetex=True)
+        ax[i, 1].set_yticklabels(np.round(mag_bins, 1), fontsize=26, usetex=False)
         ax[i, 1].set_xticks(np.linspace(0, nb_bins_bt, nb_bins_bt + 1)[:-1])
-        ax[i, 1].set_xticklabels(np.round(bt_bins[:-1], 1), fontsize=26, rotation=30, usetex=True)
+        ax[i, 1].set_xticklabels(np.round(bt_bins[:-1], 1), fontsize=26, rotation=30, usetex=False)
         
-        ax[i, 1].set_title(f"{labels[code]} Disks", fontsize=30, usetex=True)
-        ax[i, 1].set_xlabel(r"$I_{\mathrm{\mathsf{E}}}$ true b/t", fontsize=29, usetex=True)
-        ax[i, 1].set_ylabel(r"$I_{\mathrm{\mathsf{E}}}$ true magnitude", fontsize=33, usetex=True)
+        ax[i, 1].set_title(f"{labels[code]} Disks", fontsize=30, usetex=False)
+        ax[i, 1].set_xlabel(r"$I_{\mathrm{\mathsf{E}}}$ true b/t", fontsize=29, usetex=False)
+        ax[i, 1].set_ylabel(r"$I_{\mathrm{\mathsf{E}}}$ true magnitude", fontsize=33, usetex=False)
 
         cb2 = plt.colorbar(disks, ax=ax[i, 1], cax=cax1)
-        cb2.ax.set_title(r"$|\tilde{{\mathcal{B}}}|$", x=0.5, y=1.05, fontsize=fs_colorbar, usetex=True)
+        cb2.ax.set_title(r"$|\tilde{{\mathcal{B}}}|$", x=0.5, y=1.05, fontsize=fs_colorbar, usetex=False)
         cb2_ticks = np.linspace(
                 np.min(summary2D[0][param][code][1]),
                 np.max(summary2D[0][param][code][1]),
@@ -1033,7 +1033,7 @@ def summary_plot2D(codes, param, summary2D, mag_bins, bt_bins, labels):
             )
         cb2_std.ax.yaxis.set_ticks(cb2_std_ticks)
         cb2_std.ax.yaxis.set_ticklabels(cb2_std_ticks, fontsize=25)
-        cb2_std.ax.set_title(r"$\tilde{{\mathcal{D}}}$", x=0.6, y=1.05, fontsize=fs_colorbar, usetex=True)
+        cb2_std.ax.set_title(r"$\tilde{{\mathcal{D}}}$", x=0.6, y=1.05, fontsize=fs_colorbar, usetex=False)
         cb2_std.ax.yaxis.set_major_formatter(FormatStrFormatter("%.2f"))
 
     return fig
