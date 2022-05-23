@@ -1043,10 +1043,10 @@ def photo_trumpet_plots(cats, codes, fields, LABELS, TU_std, compo=None, nb_free
     
     for field in fields:
         nb_lines = int(np.ceil(len(codes) / 2))
-        fig, ax = plt.subplots(nb_lines, 2, figsize=(5*nb_lines*1.3, 5*nb_lines))
+        fig, ax = plt.subplots(nb_lines, 2, figsize=(7*2, 7*(nb_lines-0.5)))
         ax = ax.flatten()
         fst=18
-        plt.subplots_adjust(wspace=0.2, hspace=0.5)
+        plt.subplots_adjust(wspace=0.3, hspace=0.5)
         p = 0
         for code in codes:
             cat = cats[f'{code}_{field}']
