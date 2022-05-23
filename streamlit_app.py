@@ -1,3 +1,4 @@
+from email.policy import default
 import streamlit as st
 
 import numpy as np
@@ -30,7 +31,7 @@ def photometry():
     st.sidebar.markdown(
         "Adjust the values below and the figures will be updated accordingly"
     )
-    plot_type = st.sidebar.radio("Select a Type of plot", ["Summary Plots", "Trumpet Plots"])
+    plot_type = st.sidebar.radio("Select a Type of plot", ["Summary Plots", "Trumpet Plots"], index=1)
     
     dataset = st.sidebar.radio(
         "Select a Dataset", DATASETS, format_func=lambda x: LABELS[x]
@@ -63,8 +64,8 @@ def photometry():
 
     # #####  Composant OPTIONS ####
     if dataset in ["double_sersic", "multiband"]:
-        compo = st.sidebar.radio("Select the composante", ['total', 'bulge', 'disk'])
-    
+        compo = st.sidebar.radio("Select the composante", ['total'])
+        # compo = st.sidebar.radio("Select the composante", ['total', 'bulge', 'disk'])
 
     # #####  SOFTWARE OPTIONS ####
     all_code = st.sidebar.checkbox("Plot all software")
