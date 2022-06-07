@@ -23,10 +23,16 @@ PARAMETERS_2D = ["re", "q"]
 
 def photometry():
 
+    description = st.expander("README")
+    description.markdown(readme)
+
     demo = st.checkbox(
         "Demo version (much faster). Uncheck when all set to get the full results.",
         value=False,
     )
+    st.title("Euclid Morphology Challenge DIY: Photometry 💡 ")
+
+    
     st.sidebar.markdown("## Controls")
     st.sidebar.markdown(
         "Adjust the values below and the figures will be updated accordingly"
@@ -112,11 +118,15 @@ def photometry():
         return 0
 
 def morphology():
+    
+    description = st.expander("README")
+    description.markdown(readme)
 
     demo = st.checkbox(
         "Demo version (much faster). Uncheck when all set to get the full results.",
         value=True,
     )
+    st.title("Euclid Morphology Challenge DIY: Morphology *⬬*")
 
     nb_free = False
     band = None
@@ -291,39 +301,12 @@ def morphology():
             st.success(f"Results saved as {filepath}")
 
 
-def main():
-    """
-    Create the different buttons and setting of the app. The description of the buttons are in help.py
-    The buttons and setting depend of the selected dataset. The differences are written in the dictionaries
-    defined in params.py
 
-    Load the wanted dataset, defined in io.py
+page_names_to_funcs = {
+    "⬬ Morphology (EMC Part II)": morphology,
+    "💡 Photometry (EMC Part I)": photometry,
+}
 
-    Call the different actions defined in summary.py,
-    which call someroutines of utils.py and the plotting routines defined in plot.py
 
-    Launch the web page with the interface
-    """
-
-    description = st.expander("README")
-    description.markdown(readme)
-
-    st.title("MorphoChallenge DIY plots \n #### Select between Photometry (Part 1) and Morphology (Part 2)")
-
-    # paper = st.radio("", ['Morphology', 'Photometry'])
-    col1, col2 = st.columns(2)
-    with col1:
-        morpho = st.checkbox('Morphology')
-    with col2:
-        photo = st.checkbox('Photometry')
-    if morpho:
-        morphology()
-    if photo:
-        photometry()
-    # if paper == 'Photometry':
-    #     photometry(demo)
-    # else:
-    #     morphology(demo)
-
-if __name__ == "__main__":
-    main()
+selected_page = st.sidebar.selectbox("Chose the EMC paper", page_names_to_funcs.keys())
+page_names_to_funcs[selected_page]()
