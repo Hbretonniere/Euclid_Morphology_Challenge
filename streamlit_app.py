@@ -308,5 +308,5 @@ page_names_to_funcs = {
 }
 
 
-selected_page = st.sidebar.selectbox("Chose the EMC paper", page_names_to_funcs.keys())
+selected_page = st.sidebar.selectbox("Choose the EMC paper", page_names_to_funcs.keys())
 page_names_to_funcs[selected_page]()
