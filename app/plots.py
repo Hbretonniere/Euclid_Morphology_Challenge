@@ -14,7 +14,7 @@ from app.params import y_lims
 from app.utils import define_y_axis_slider, chose_mode, compute_summary, sub_cat, find_outliers, compute_error_bin
 
 plt.gca().ticklabel_format(axis="both", style="plain", useOffset=False)
-# plt.rcParams['text.usetex'] = True
+plt.rcParams['text.usetex'] = True
 
 # @st.cache
 def trumpet_plot(
