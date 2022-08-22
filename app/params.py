@@ -187,15 +187,15 @@ LABELS = {
     "Disk q": "Disk \n axis ratio",
     "Bulge mu": r"Bulge $\mu$",
     "Disk mu": r"Disk $\mu$",
-    'vis': r'$I_{\scriptscriptstyle\rm E}$',
-    'j_nir': r'$J_{\scriptscriptstyle\rm E}$',
-    'y_nir': r'$Y_{\scriptscriptstyle\rm E}$',
-    'h_nir': r'$H_{\scriptscriptstyle\rm E}$',
-    'g_lsst':r'\emph{g}',
-    'r_lsst':r'\emph{r}',
-    'i_lsst':r'\emph{i}',
-    'u_lsst':r'\emph{u}',
-    'z_lsst':r'\emph{z}'
+    'vis': r'$I_{\rm E}$',
+    'j_nir': r'$J_{\rm E}$',
+    'y_nir': r'$Y_{\rm E}$',
+    'h_nir': r'$H_{\rm E}$',
+    'g_lsst':r'g',
+    'r_lsst':r'r',
+    'i_lsst':r'i',
+    'u_lsst':r'u',
+    'z_lsst':r'z'
 }
 
 y_lims = {'re':{'B':[-0.1, 0.12], 'D':[-0.05, 0.25], 'O':[-0.05, 0.32]},
