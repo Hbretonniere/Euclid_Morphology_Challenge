@@ -90,7 +90,7 @@ def trumpet_plot(
     if len(codes) > 4:
         nb_columns = 7
         dim = (15, 17)
-        legend_y = -3.8
+        legend_y = -3.9
     elif len(codes) > 2:
         nb_columns = 7
         dim = (15, 15)
@@ -211,6 +211,8 @@ def trumpet_plot(
 
         mean_bins =  (x_bins[1:] + x_bins[:-1]) * 0.5
 
+        # if param in {'reb', 'red', 're'}:
+            # bias_symbole = 
         grid_scat.errorbar(
             mean_bins,
             mean,
@@ -220,7 +222,8 @@ def trumpet_plot(
             elinewidth=4,
             capsize=5,
             markeredgewidth=3,
-            label=r"running bias $\tilde{\mathcal{B}}$ with dispersion $\tilde{\mathcal{D}}$ error bars",
+            # label=r"Running bias $\mathcal{B}$ with dispersion $\mathcal{D}$ error bars",
+            label=r"Running bias $\tilde{\mathcal{B}}$ with dispersion $\tilde{\mathcal{D}}$ error bars",
         )
         grid_scat.errorbar(
             mean_bins,
@@ -260,43 +263,43 @@ def trumpet_plot(
 
         if param == 'n':
             grid_scat.set_ylabel(
-                r"$\mathrm{Pred}_{\log_{\mathrm{10}}({n})} - \mathrm{True}_{\log_{\mathrm{10}}({n})} $",
+                r"${\log_{\mathrm{10}}({n})}^{\mathrm{Pred}} - {\log_{\mathrm{10}}({n})}^{\mathrm{True}} $",
                 fontsize=25, usetex=False
             )
         elif param == 'q':
             grid_scat.set_ylabel(
-                r"$\mathrm{Pred}_{q} - \mathrm{True}_{q} $",
+                r"${q}^{\mathrm{Pred}} - q^\mathrm{True}$",
                 fontsize=25, usetex=False
             )
         elif param == 're':
             grid_scat.set_ylabel(
-                r'$\frac{\mathrm{Pred}_{\mathrm{r_{e}}} - \mathrm{True}_{r_{\mathrm{e}}}}{\mathrm{True}_{r_{\mathrm{e}}}} $',
+                r'$\frac{{\mathrm{r^{\mathrm{\,Pred}}_{e}}} - {r^{\mathrm{\,True}}_{\mathrm{e}}}}{{r^{\mathrm{\,True}}_{\mathrm{e}}}} $',
                 fontsize=35, usetex=False
             )
         elif param == 'red':
             grid_scat.set_ylabel(
-                r'$\frac{\mathrm{Pred}_{r_{\mathrm{e, d}}} - \mathrm{True}_{r_{\mathrm{e, d}}}}{\mathrm{True}_{r_{\mathrm{e, d}}}} $',
+                r'$\frac{{r^{\mathrm{\,Pred}}_{\mathrm{e, d}}} - {r^{\mathrm{\,True}}_{\mathrm{e, d}}}}{{r^{\mathrm{\,True}}_{\mathrm{e, d}}}} $',
                 fontsize=35, usetex=False
             )
         elif param == 'reb':
             grid_scat.set_ylabel(
-                r'$\frac{\mathrm{Pred}_{r_{\mathrm{e, b}}} - \mathrm{True}_{r_{\mathrm{e, b}}}}{\mathrm{True}_{r_{\mathrm{e, b}}}} $',
+                r'$\frac{{r^{\mathrm{\,Pred}}_{\mathrm{e, b}}} - {r^{\mathrm{\,True}}_{\mathrm{e, b}}}}{{r^{\mathrm{\,True}}_{\mathrm{e, b}}}} $',
                 fontsize=35, usetex=False
             )
         elif param == 'bt':
             grid_scat.set_ylabel(
-                f"$\mathrm{{Pred_{{b/t}}}} - \mathrm{{True_{{b/t}}}}$",
+                r'$\mathrm{b/t^{Pred}} - \mathrm{b/t^{True}}$',
                 fontsize=30, usetex=False
             )
         
         elif param == 'qb':
             grid_scat.set_ylabel(
-                r'$\mathrm{Pred}_{q_{\mathrm{b}}} - \mathrm{True}_{q_{\mathrm{b}}}$',
+                r'${q^{\mathrm{\,Pred}}_{\mathrm{b}}} - {q^{\mathrm{\,True}}_{\mathrm{b}}}$',
                 fontsize=30, usetex=False
             )
         elif param == 'qd':
             grid_scat.set_ylabel(
-                r'$\mathrm{Pred}_{q_{\mathrm{d}}} - \mathrm{True}_{q_{\mathrm{d}}}$',
+                r'${q^{\mathrm{\,Pred}}_{\mathrm{d}}} - {q^{\mathrm{\,True}}_{\mathrm{d}}}$',
                 fontsize=30, usetex=False
             )
         
@@ -866,14 +869,14 @@ def bt_multiband_plot(
 
         p += 1
     
-    ax[0, 0].set_ylabel('Bright galaxies \n \n $\mathrm{{Pred_{{b/t}}}} - \mathrm{{True_{{b/t}}}} $', fontsize=23, usetex=False)
-    ax[1, 0].set_ylabel('Intermediate galaxies \n \n $\mathrm{{Pred_{{b/t}}}} - \mathrm{{True_{{b/t}}}} $', fontsize=23, usetex=False)
-    ax[2, 0].set_ylabel('Faint galaxies \n \n $\mathrm{{Pred_{{b/t}}}} - \mathrm{{True_{{b/t}}}} $', fontsize=23, usetex=False)
+    ax[0, 0].set_ylabel('Bright galaxies \n \n $\mathrm{{b/t^{{Pred}}}} - \mathrm{{b/t^{{True}}}} $', fontsize=23, usetex=False)
+    ax[1, 0].set_ylabel('Intermediate galaxies \n \n $\mathrm{{b/t^{{Pred}}}} - \mathrm{{b/t^{{True}}}} $', fontsize=23, usetex=False)
+    ax[2, 0].set_ylabel('Faint galaxies \n \n $\mathrm{{b/t^{{Pred}}}} - \mathrm{{b/t^{{True}}}} $', fontsize=23, usetex=False)
     fig.canvas.draw()
     [ax.set_yticklabels(ax.get_yticklabels(), fontsize=19, usetex=False) for ax in ax.flatten()]
     [axe.set_xticks(np.arange(len(bands))) for axe in ax.flatten()]
     band_labels = [labels[band] for band in bands]
-    [axe.set_xticklabels(band_labels, rotation=45, fontsize=22, usetex=False) for axe in ax.flatten()]
+    [axe.set_xticklabels(band_labels, rotation=45, fontsize=22, usetex=True) for axe in ax.flatten()]
     if len(bands)==9:
         [axe.add_artist(Rectangle([-0.2, -1], 3.5, 3, fill=True, alpha=0.05, color='red')) for axe in ax.flatten()]
         [axe.add_artist(Rectangle([3.7, -1], 0.55, 3, fill=True, alpha=0.05, color='blue')) for axe in ax.flatten()]
@@ -1052,7 +1055,7 @@ def photo_trumpet_plots(cats, codes, fields, LABELS, TU_std, compo=None, nb_free
             cat = cats[f'{code}_{field}']
             a = ax[p].scatter(cat[:, 0], cat[:, 1], c=cat[:, 2], marker='.', cmap='gist_rainbow', s=1)
             ax[p].set_ylim([-1, 1])
-            plt.colorbar(a, ax=ax[p]).set_label(label='BT', size=20)
+            plt.colorbar(a, ax=ax[p]).set_label(label='b/t', size=20)
             if compo in ['bulge', 'disk']:
                 if nb_free:
                     ax[p].set_title(f'{LABELS[code]}, \n Field {field}, {compo} component, bulge free', fontsize=fst)
