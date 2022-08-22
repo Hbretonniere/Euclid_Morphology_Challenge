@@ -147,7 +147,11 @@ def morphology():
         dataset_params = double_sersic_params
         nb_free = st.sidebar.checkbox("Use free bulge Sersic fit")
     elif dataset == "multiband":
-        dataset_params = multiband_params
+        if demo :
+            st.markdown('## Please Uncheck demo-mode to have enough statistics on multiband data.')
+            return 0
+        else:
+            dataset_params = multiband_params
     if nb_free:
         dataset_params = double_sersic_free_params
 
