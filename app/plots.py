@@ -876,7 +876,7 @@ def bt_multiband_plot(
     [ax.set_yticklabels(ax.get_yticklabels(), fontsize=19, usetex=False) for ax in ax.flatten()]
     [axe.set_xticks(np.arange(len(bands))) for axe in ax.flatten()]
     band_labels = [labels[band] for band in bands]
-    [axe.set_xticklabels(band_labels, rotation=45, fontsize=22, usetex=True) for axe in ax.flatten()]
+    [axe.set_xticklabels(band_labels, rotation=45, fontsize=20, usetex=False) for axe in ax.flatten()]
     if len(bands)==9:
         [axe.add_artist(Rectangle([-0.2, -1], 3.5, 3, fill=True, alpha=0.05, color='red')) for axe in ax.flatten()]
         [axe.add_artist(Rectangle([3.7, -1], 0.55, 3, fill=True, alpha=0.05, color='blue')) for axe in ax.flatten()]
