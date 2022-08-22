@@ -64,7 +64,7 @@ def load_data(dataset, band=None, nb_free=False, demo=False):
     # filename = f"data/gala_constrained_challenge_5sig_overlap_double_sersic.fits"
 
     if not os.path.exists(filename):
-        st.markdown('# Downloading the catalogues, can take some time...')
+        st.markdown('# Downloading the catalogues, it can take some time (10~20 minutes)...')
         os.system('zenodo_get -o ./data/ 10.5281/zenodo.6421905')
     
     cat = read_catalogue(filename)
