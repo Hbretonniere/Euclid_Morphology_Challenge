@@ -2,10 +2,19 @@ Along with the morphology paper analysis, we provide the minimum configuration f
 
 You will find in each subfolder the configuration files used for the production of the results presented in the papers, with a README if provided by the different teams. 
 
-|  	| Version 	| Git 	|
-|---	|---	|---	|
-| DeepLeGATo 	| ? 	| ? 	|
-| Galapagos 	| ? 	| https://github.com/MegaMorph/galapagos 	|
-| Morphometryka 	| ? 	|  	|
-| Profit 	| ? 	| https://github.com/asgr/ProFound 	|
-| SourceXtractor++ 	| ? 	| https://github.com/astrorama/SourceXtractorPlusPlus 	|
+\begin{table}[]
+\begin{tabular}{lll}
+                                    & Version                & Git                   \\
+DeepLeGATo                          & ?                      & ?                     \\
+Galapagos &
+  v2.4.3 (\textbackslash{}texttt\{galfitm\} 1.4.4; \textbackslash{}texttt\{SExtractor\} 1.4.4) &
+  https://github.com/MegaMorph/galapagos \\ \hline
+\multicolumn{1}{|l|}{Morphometryka} & \multicolumn{1}{l|}{?} & \multicolumn{1}{l|}{} \\ \hline
+\multicolumn{1}{|l|}{Profit} &
+  \multicolumn{1}{l|}{?} &
+  \multicolumn{1}{l|}{https://github.com/asgr/ProFound} \\ \hline
+\multicolumn{1}{|l|}{SourceXtractor++} &
+  \multicolumn{1}{l|}{?} &
+  \multicolumn{1}{l|}{https://github.com/astrorama/SourceXtractorPlusPlus} \\ \hline
+\end{tabular}
+\end{table}
