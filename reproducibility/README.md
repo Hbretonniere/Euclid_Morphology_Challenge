@@ -1,4 +1,4 @@
-Along with the morphology paper analysis, we provide the minimum configuration files of the software used in the challenge. 
+Along with the morphology paper analysis, we provide the configuration files of the software used in the challenge, where available.
 
 You will find in each subfolder the configuration files used for the production of the results presented in the papers, with a README if provided by the different teams. 
 
