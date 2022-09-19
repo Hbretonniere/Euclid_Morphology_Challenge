@@ -1,0 +1,132 @@
+#===========FILE LOCATIONS===========
+A00) /scigarfs/home/bhaeussl/megamorph/scripts_boris/euclid/gala_setup/field0/ds/images.euclid0.ds  #file containing ALL input files, including SExtractor (1st line) and all bands, weight,...)
+A01) /scigarfs/home/bhaeussl/EUC_out/E0/ds/      #output directory for catalogues
+#
+#===========SEXTRACTOR SETUP===========
+B00) execute                            #execute the SExtractor block
+B01) /lustre/opsw/software/sextractor-2.19.5/bin/sex  #/usr/bin/sex   #SExtractor executable including path
+B02) /scigarfs/home/bhaeussl/megamorph/scripts_boris/euclid/gala_setup/general_setup/gala.param   #output parameters in .param-format
+B03) /scigarfs/home/bhaeussl/megamorph/scripts_boris/euclid/gala_setup/general_setup/cold_sci.sex     #SExtractor setup file (cold)
+B04) coldcat                            #output catalogue (cold)
+B05) coldseg.fits                       #output segmentation map (cold)
+B06) /scigarfs/home/bhaeussl/megamorph/scripts_boris/euclid/gala_setup/general_setup/hot_sci.sex      #SExtractor setup file (hot)
+B07) hotcat                             #output catalogue (hot)
+B08) hotseg.fits                        #output segmentation map (hot)
+B09) 1.1                                #enlarge the cold isophotes for catalogue combination by a factor
+B10) outcat                             #output combined catalogue
+B11) outseg.fits                        #output combined segmentation map
+B12) outparam                           #output parameter file
+B13) check.fits                         #check image filename
+B14) apertures                          #check image type
+B15) rms                   		# ('rms' = true) is the SEXtractor 'weight' map a RMS map that should be used for SExtractor?
+B16) no_excludes              		# list of positions to be excluded from the individual SExtractor catalogues (to remove bad detections; format: x y)
+B17) 1.5                                #radius in pix used to exclude objects
+B18) all #outonly                           #if set "outonly": hot/cold catalogues/segmaps are deleted
+                                        #else: all catalogues/segmaps are kept
+B19) no_excludes                        # list of positions to be excluded from the final combined GALFIT catalogue
+                                        # (bad sources, but required for a good fit of neighbouring sources; format: x y)
+B20) sexcomb_multi_wl                   #combined sextractor catalogue put in A01)
+#
+#===========STAMP SETUP==========
+C00) execute #execute the Stamps creation block
+C01) stamps  #descriptor file for postage stamps
+C02) v       #postposition for postage stamps (only used for single image run, NOT for mutli-wavelength)
+C03) 4.0     #scale factor by which the sextractor isophotes are enlarged
+#
+#===========SKY PREPARATION =====
+D00) execute #execute the sky preparation block
+D01) skymap  #output object/sky-mapfile
+D02) outsky  #output filename for sky values
+D03) 2.0     #scale factor by which SEx isophote is enlarged (for skymap) (3 in old Galapagos example file)
+D04) 2.5     #scale factor by which SEx isophote is enlarged (for neighbours)
+D05) 10      #additional offset to scale factor
+D06) 10      #distance between individual sky isophotes
+D07) 20      #width of individual sky isophotes
+D08) 10      #gap between sextractor isophote and inner sky isophote
+D09) 2.5     #cut below which objects are considered as contributing
+D10) 4       #nobj_max; max number of allowed contributing sources
+D11) 1.4     #power by which the flux_radius is raised to convert to Re
+D12) 15                       # calculate the slope of the sky from the x last determinations
+D13) -0.15                     # slope in log(fwhm_image) vs. mag_best below which object is star
+D14) 3.8                       # zeropoint in log(fwhm_image) vs. mag_best below which object is star
+D15) 5                         # magnitude faint end limit for secondaries when fitting galaxies
+D16) 2                         # magnitude faint end limit for secondaries when fitting stars
+D17) 8                         # number of neighbouring frames (see Barden 2012 for details)
+D18) 12                        # maximum number of parallel processes (see Barden 2012 for details)
+D19) 300                       # minimum distance (in arcseconds) between sources processed in parallel (see text for details)
+D20) 80                        # minimum distance (in arcseconds) to already blocked objects
+                               # (to make sure that no faint object next to a very bright one is fit. standard value: D20)/3. )
+D21)   #[...]/gama_target_list_plus_neighbours # optional list containing primary targets (format: RA DEC; empty string: all objects)
+                               # feature switched off when file does not exist, everything will be fit
+D22) 1.0                       # search/correlation radius for the above list [arcsec]
+#
+# Test for backwards compatibility: D21!
+
+#===========GALFIT SETUP===========
+E00) /scigarfs/home/bhaeussl/megamorph/galfit/exec/galfitm-1.4.4-linux-x86_64       #Galfit executable including path
+E01) no_batch                    #filename for list of tiles in current batch
+E02) obj                         #object file preposition
+E03) gf                          #preposition for GALFIT output files
+E04) /scigarfs/home/bhaeussl/EUCLID/data/PSFs/psf_visSC3ovs6_centered_realpixscale.norm.fits,/scigarfs/home/bhaeussl/EUCLID/data/PSFs/psf_lsst_u12jun.swarp.resamp_centered.norm.fits,/scigarfs/home/bhaeussl/EUCLID/data/PSFs/psf_lsst_g12jun.swarp.resamp_centered.norm.fits,/scigarfs/home/bhaeussl/EUCLID/data/PSFs/psf_lsst_r12jun.swarp.resamp_centered.norm.fits,/scigarfs/home/bhaeussl/EUCLID/data/PSFs/psf_lsst_i12jun.swarp.resamp_centered.norm.fits,/scigarfs/home/bhaeussl/EUCLID/data/PSFs/psf_lsst_z12jun.swarp.resamp_centered.norm.fits,/scigarfs/home/bhaeussl/EUCLID/data/PSFs/nirYnew12jun.swarp.resamp_centered.norm.fits,/scigarfs/home/bhaeussl/EUCLID/data/PSFs/nirJnew12jun.swarp.resamp_centered.norm.fits,/scigarfs/home/bhaeussl/EUCLID/data/PSFs/nirHnew11jun.swarp.resamp_centered.norm.fits #PSF filename including path
+E05) mask                        #mask file preposition
+E06) constr                      #constraint file preposition
+E07) 128                         #convolution box size
+E08) 23.9                        #zeropoint (only used for single image run, NOT for mutli-wavelength)
+E09) 0.1                       #plate scale of the images [arcsec/pixel]
+E10) 1.0                         #exposure time (only used for single image run, NOT for mutli-wavelength)
+E11) 400                         #constraint max Re
+E12) -5                          #constraint min magnitude deviation (minus)
+E13) 5                           #constraint max magnitude deviation (plus)
+E14) 0.2                         #constraint min sersic index
+E15) 12                           #constraint max sersic index
+E16) nice                        #nice the GALFIT process ("nice" = true)
+E17) 4.0                         #GALFIT version string. E.g. 2.0.3c
+E18) input,model,residual,psf  	          # string used to define the format of the galfit output files (string simply passed on to galfitm)
+       		          #input,model,residual,psf  
+			  # Allowed values (only in case galfitm1.2.0 or later is used, only listing the ones that make sense, e.g. nonparametric can not happen in Galapagos):
+		          # blank,input,model,residual -- as usual Galfit
+		          # input,model,residual,psf -- as Galapagos before, but without the blank image at the front. 
+			  # component -- individual model components (not very useful in sigle-sersic fitting)
+			  # psf -- input psf image
+			  # sigma -- sigma image (input or created)
+			  # NOT (!!!) itertable -- table of parameters at each iteration. This would create a output file at the beginning of the fitting process.
+			  #      This file would confuse Galapagos, this option should hence NOT be used!!
+			  # model,residual    # or any comma seaprated list of valid options
+			  # different formats have no influence on the performance of Galapagos, but might make continuing from the output files with your own scripts easier.
+
+E19) 240                  # time (in minutes) after which galfit processes are killed
+                          # feature switched off when time == 0 
+E20) 0,0,8,2,2,0,0        # x,y,mag,re,n,AR,PA  order of Chebyshev polynomials in the individual parameters to be used in GALFIT
+                          # 0 = constant over all wavelength, 1 = linear over wavelength,... #band-1 = free
+                          # These are ADDITIONAL degrees of freedom, e.g. 0 STILL means, the parameters can be fit (something which is decided by GALAPAGOS, not the user)
+                          # This is DIFFERENT to the number that has to be given to GALFIT, in galfit = gala+1
+E21) galfit               # output folder name for all galfit output files
+E22) restrict             # restrict the maxiumum number of degrees of freedom to the number of band for an object? ("restrict" = true)
+E23) 30                   # fraction of data pixels ==0 within the primaries SExtractor ellipse, which restricts the polynomial (in %), 
+                          # larger value allows more pixels to be 0 before taking action 
+                          # e.g. 99 still allows full polynomial freedom if 1% of the data has values (but is a foolish value)
+E24) 0                    # minimum number of good images that are needed for the fit (is set to be >1 by the code), e.g. objects without any good data are NEVER fit) 
+                          # (if restricted above to less than that, galfit startfile is written out, but fit is NOT started)
+## to be put in:
+#  max constraint for n as user input
+#  block for B/D decomposition
+#
+# check for backwards compatibility: E16, E17
+#
+#===========B/D DECOMPOSITION SETUP===========
+F00) execute              # execute the B/D fitting block. Mostly assumes that single sersic fitting (block E) is also or had previsouly been run
+F01) 0,0,8,0,-1,0,0  	 # similar to E18 for BULGE   
+F02) 0,0,8,0,-1,0,0  	 # similar to E18 for DISK   
+F03) bd_fix                 # output label
+F04) none    # optional list containing primary targets
+F05) 1.0     		 # search/correlation radius for the above list
+F06) 40.0      		 # additional magnitude limit (sersic fit, main band) down to which B/D will be done
+F07)  		 	 # input,model,residual,component,psf # See E18, but for B/D fitting (only in case galfitm1.2.0 or later is used)
+# ------ experimental and probably does not work for other users without code adaptation
+F08) nHPC            #switches to HPC mode ("HPC" = true), paths will be adapted (F08 and F09 become important)
+F09) gama/galapagos/galapagos_2.0.3_galfit_0.1.2.1_GAMA_9               # alternative path for Supercomputer use.
+F10) /home/boris/gama/#, gama/  #PSF filename correction (!). [1] is replaced by [2]
+#===========OUTPUT CATALOGUE SETUP===========
+G00) execute      #execute catalogue combination block (read single_sersic)
+G01) execute      #execute catalogue combination block (read single-sersic & B/D)
+G02) EUCLID0_ds_vis_fix.fits #filename for output catalogue in A01)
