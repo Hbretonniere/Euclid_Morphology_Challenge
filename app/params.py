@@ -176,6 +176,7 @@ LABELS = {
     "Truered": "True disk radius",
     "True disk radius": "True disk radius",
     "Truemag": "$I_{\mathrm{\mathsf{E}}}$ true magnitude",
+    "_Truemag": "VIS true magnitude",
     "Truez": "True redshift",
     'Truen': "True Sérsic index",
     "True b/t": "$I_{\mathrm{\mathsf{E}}}$ true b/t",

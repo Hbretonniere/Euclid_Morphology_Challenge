@@ -245,8 +245,10 @@ def morphology():
             )
        
         xs = get_x_axis_range(dataset, x_axis, demo)
+        print(LABELS['_'+x_axis])
         n_bins = st.sidebar.number_input(
-            f"Number of {LABELS[x_axis]} bins",
+            
+            f"Number of {LABELS['_'+x_axis]} bins",
             min_value=2,
             max_value=15,
             value=dataset_params["default bins"][plot_type],
