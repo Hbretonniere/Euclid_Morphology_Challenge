@@ -1,0 +1,14 @@
+Material to run SE++ on multiband branch of the EMC.
+
+We processed the EMC using the latest version of the code by Jan 22nd 2022. Beware that results may vastly differ with newest versions! See Euclid paper for details.
+
+This directory contains julia scripts that can be run to prepare the input images of the challenge. Very little was done compared to native_pixels case. We only applied a rough rescaling to the rms maps to account for noise correlations (scaling rms by sqrt(Number of pixels a native pixel is split into). Not doing so would have been "morally" wrong!
+
+
+Users should first run adapt the path in setup.sh to match their own local download.
+
+- then, run `./coms.sh` shell script. Here again, Nth sets the number of threads over which calculations are run... Edit before as you see fit.
+
+After a few hours, it's done!
+
+- users might want to look at the Catalog_MatchCompare.jl script to explore the output catalogue and compare it with the ground truth available on a subset of the simulated field (more standard julia packages require installation).
