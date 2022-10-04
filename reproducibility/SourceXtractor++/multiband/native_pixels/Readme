@@ -1,0 +1,16 @@
+Material to run SE++ on multiband branch of the EMC.
+
+We processed the EMC using the latest version of the code by Feb 24th 2021. Beware that results may vastly differ with newest versions! See Euclid paper for details.
+
+This directory contains julia scripts that can be run to prepare the input images in order to bring them back to their native pixel scale instead of using "coadds" resampled on the same pixel grid as VIS band.
+A higher resolution model of the VIS PSF was derived with PSFEx run on simulated rms images!
+
+Users should first run adapt the value of dir in setup.jl to match their own local download.
+
+- run it typing `julia setup.jl`. Some standard julia packages may have to be installed first (cf commented out "using" header lines).
+
+- then, run `./coms.sh` shell script. Here again, Nth sets the number of threads over which calculations are run... Edit before as you see fit.
+
+After a few hours, it's done!
+
+- users might want to look at the Catalog_MatchCompare.jl script to explore the output catalogue and compare it with the ground truth available on a subset of the simulated field (more standard julia packages require installation).
